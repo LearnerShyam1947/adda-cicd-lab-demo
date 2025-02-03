@@ -1,20 +1,17 @@
-# Use an official OpenJDK base image with Java 21
-FROM openjdk:21-jdk-slim as build
+
+# Stage 1: Build the application
+FROM maven:3.9.9-eclipse-temurin-21-alpine as build
 
 WORKDIR /app
-
 COPY . .
 
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Create a minimal runtime image with just the built JAR
+# Stage 2: Create a lightweight image
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=BUILD /app/target/*.jar app.jar
 
 EXPOSE 8080
-
-# Command to run the Spring Boot app (no need to hardcode env vars here)
 ENTRYPOINT ["java", "-jar", "app.jar"]
