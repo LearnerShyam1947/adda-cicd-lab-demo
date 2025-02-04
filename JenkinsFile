@@ -46,11 +46,11 @@ pipeline {
         }
         
         
-        stage('Build Spring Boot Project') {
-            steps {
-                sh "mvn -Dmaven.test.failure.ignore=true -DskipTests clean package"
-            }
-        }
+        // stage('Build Spring Boot Project') {
+        //     steps {
+        //         sh "mvn -Dmaven.test.failure.ignore=true -DskipTests clean package"
+        //     }
+        // }
         
         stage('Dependency Check') {
             steps {
