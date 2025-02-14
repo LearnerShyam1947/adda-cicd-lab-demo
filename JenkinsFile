@@ -15,6 +15,12 @@ pipeline {
 
     stages {
 
+        stage ("clean workspace") {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('GitHub Checkout') {
             steps {
                 git branch: 'master', credentialsId: 'LearnerShyam1947_GitHub_credentials', url: 'https://github.com/LearnerShyam1947/adda-cicd-lab-demo.git'
@@ -57,6 +63,30 @@ pipeline {
                 dependencyCheck additionalArguments: '--format HTML', odcInstallation: 'dp-check-12.0.2'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    sh "mvn clean verify sonar:sonar -Dsonar.projectKey=adda-cicd"
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') { 
+                        def qg = waitForQualityGate() 
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        } else {
+                            echo 'Quality Gate Passed'
+                        }
+                    }
+                }
+            }
+        }
+
 
         stage('Build Docker Image') {
             steps {
