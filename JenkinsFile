@@ -23,7 +23,7 @@ pipeline {
 
         stage('GitHub Checkout') {
             steps {
-                git branch: 'master', credentialsId: 'LearnerShyam1947_GitHub_credentials', url: 'https://github.com/LearnerShyam1947/adda-cicd-lab-demo.git'
+                git branch: 'clean', credentialsId: 'LearnerShyam1947_GitHub_credentials', url: 'https://github.com/LearnerShyam1947/adda-cicd-lab-demo.git'
             }
         }
 

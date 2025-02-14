@@ -29,7 +29,7 @@ public class StudentController {
 
     // Create a new student
     @PostMapping
-    public ResponseEntity<?> createStudent(@RequestBody StudentDTO studentDTO) {
+    public  ResponseEntity<Map<String, Object>> createStudent(@RequestBody StudentDTO studentDTO) {
         StudentEntity savedStudent = studentService.createStudent(studentDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -43,7 +43,7 @@ public class StudentController {
 
     // Get all students
     @GetMapping
-    public ResponseEntity<?> getAllStudents() {
+    public ResponseEntity<List<StudentEntity>> getAllStudents() {
         List<StudentEntity> students = studentService.getAllStudents();
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -52,13 +52,13 @@ public class StudentController {
 
     // Get student by ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
     // Update student
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<Map<String, Object>> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
         StudentEntity updatedStudent = studentService.updateStudent(id, studentDTO);
         
         return ResponseEntity
@@ -73,7 +73,7 @@ public class StudentController {
 
     // Delete student
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
